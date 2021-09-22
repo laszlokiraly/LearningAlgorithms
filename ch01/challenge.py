@@ -62,6 +62,14 @@ def linear_median(A):
             hi = j-1
     return A[lo]
 
+def median_from_sorted_list(A):
+    sorted_A = sorted(A)
+    len_A = len(A)
+    if len_A % 2 == 0:
+        return (sorted_A[(len_A//2) - 1] + sorted_A[len_A//2]) / 2
+    else:
+        return sorted_A[len_A//2]
+
 def counting_sort(A, M):
     """
     Update A in place to be sorted in ascending order if all elements
@@ -140,10 +148,10 @@ a = list(range({}))
 random.shuffle(a)
 '''.format(n), repeat=10, number=5))/5
 
-        t_sort = 1000*min(timeit.repeat(stmt='assert(sorted(a)[{0}//2] == {0}//2)'.format(n),
+        t_sort = 1000*min(timeit.repeat(stmt='assert(median_from_sorted_list(a) == {0}//2)'.format(n),
                                         setup='''
 import random
-from ch01.challenge import linear_median
+from ch01.challenge import median_from_sorted_list
 a = list(range({}))
 random.shuffle(a)
 '''.format(n), repeat=10, number=5))/5
@@ -165,7 +173,7 @@ def run_median_less_than_trial(max_k=20, output=True):
 
         # Generated external sorted to reuse list
         RecordedItem.clear()
-        med2 = sorted(A)[n//2]
+        med2 = median_from_sorted_list(A)
         sort_lt = RecordedItem.report()[1]
 
         RecordedItem.clear()
@@ -188,6 +196,14 @@ def is_palindrome2(w):
         if w[0] != w[-1]:     # if mismatch, return False
             return False
         w = w[1:-1]           # strip characters on either end; repeat
+
+    return True               # must have been a Palindrome
+
+def is_palindrome3(w):
+    """iterate from start and from end and compare, without copying arrays"""
+    for i in range(0,round(len(w)/2)):
+        if w[i] != w[-(i+1)]:
+            return False
 
     return True               # must have been a Palindrome
 

@@ -3,11 +3,13 @@
 import random
 import unittest
 
+from algs.table import visualize
+
 from ch01.largest import largest, alternate, just_three, native_largest
 from ch01.largest_two import largest_two, tournament_two, mutable_two
 from ch01.largest_two import sorting_two, double_two, tournament_two_object
-from ch01.challenge import linear_median, is_palindrome_letters_only, counting_sort
-from ch01.challenge import counting_sort_improved, is_palindrome1, is_palindrome2
+from ch01.challenge import linear_median, median_from_sorted_list, is_palindrome_letters_only, counting_sort
+from ch01.challenge import counting_sort_improved, is_palindrome1, is_palindrome2, is_palindrome3
 
 BEST_CASE = list(range(10))
 WORST_CASE = list(range(10,0,-1))
@@ -167,8 +169,10 @@ class TestChapter1(unittest.TestCase):
         for pal in ['aba', 'abba', 'a']:
             self.assertTrue(is_palindrome1(pal))
             self.assertTrue(is_palindrome2(pal))
+            self.assertTrue(is_palindrome3(pal))
             self.assertFalse(is_palindrome1(pal+'x'))
             self.assertFalse(is_palindrome2(pal+'x'))
+            self.assertFalse(is_palindrome3(pal+'x'))
 
         palindromes = [
             'Able was I ere I saw Elba',
@@ -185,21 +189,34 @@ class TestChapter1(unittest.TestCase):
         from ch01.challenge import run_median_less_than_trial
 
         tbl = run_median_less_than_trial(max_k=10, output=False)
+        visualize(tbl, 'run_median_less_than_trial', 'test-run_median_less_than_trial', print_success=False)
         self.assertTrue(tbl.entry(513,'median_count') < tbl.entry(513,'sort_median_count'))
 
     def test_run_counting_sort_trials(self):
         from ch01.challenge import run_counting_sort_trials
 
         tbl = run_counting_sort_trials(max_k=12, output=False)
+        visualize(tbl, 'run_counting_sort_trials', 'test-run_counting_sort_trials', print_success=False)
         self.assertTrue(tbl.entry(2048,'counting_sort_improved') <= tbl.entry(2048,'counting_sort'))
 
     def test_linear_median(self):
         self.assertEqual(5, linear_median([5]))
         self.assertEqual(5, linear_median([3,5,7]))
+        # incorrect implementation of median
         self.assertEqual(5, linear_median([3,5,6,7]))
 
         with self.assertRaises(IndexError):
             linear_median([])
+
+    def test_median_from_sorted_list(self):
+        self.assertEqual(5, median_from_sorted_list([5]))
+        self.assertEqual(5, median_from_sorted_list([3,5,7]))
+        # correct implementation of median
+        self.assertEqual(5.5, median_from_sorted_list([3,5,6,7]))
+        self.assertEqual(5.5, median_from_sorted_list([6,7,3,5]))
+
+        with self.assertRaises(IndexError):
+            median_from_sorted_list([])
 
     def test_tournament_allows_odd(self):
         from ch01.challenge import tournament_allows_odd

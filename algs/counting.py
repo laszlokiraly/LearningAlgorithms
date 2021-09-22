@@ -45,3 +45,6 @@ class RecordedItem:
     def __gt__(self, other):
         RecordedItem.num_gt += 1
         return self.val > other.val
+
+    def __add__(self, other):
+        return self.val + other.val

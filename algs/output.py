@@ -2,10 +2,11 @@
 Provide access to where images are output.
 """
 import os
+import datetime
 
 IMAGE_DIR = 'images'
 
-def visualize(tbl, description, label, xaxis='Problem instance size', yaxis='Time (in seconds)'):
+def visualize(tbl, description, label, xaxis='Problem instance size', yaxis='Time (in seconds)', print_success=True):
     """
     Plot the table and store into file. If MatPlotLib is not installed, this
     silently ignores this request.
@@ -36,10 +37,13 @@ def visualize(tbl, description, label, xaxis='Problem instance size', yaxis='Tim
     axes.legend(loc='upper left')
     axes.grid()
 
-    img_file = image_file(label)
+    now = datetime.datetime.now()
+
+    img_file = image_file(f"{label}-{now.strftime('%Y-%m-%d-%H%M%S')}")
     fig.savefig(img_file)
-    print('Wrote image to', img_file)
-    print()
+    if print_success:
+        print('Wrote image to', img_file)
+        print()
 
 def image_file(relative_name):
     """
